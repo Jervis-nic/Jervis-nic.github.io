@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="前言关于这个工具的制作，这篇文章提供了基本思路，可以参考下：自定义命令行工具基于Nodejs 目录结构在该目录下：C:\Users\用户名\AppData\Roaming\npm ，新建相关文件，以及安装所依赖的插件包。12345678910111213141516npm|--nie.cmd  //windows下的命令入口文件(自定义的命令)|--node_modules  //nodejs的全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于NodeJs的自定义命令行图片压缩工具制作">
+<meta property="og:url" content="http://xiaojiecong.github.io/2017/08/27/基于NodeJs的自定义命令行图片压缩工具制作/index.html">
+<meta property="og:site_name" content="前端搜索者">
+<meta property="og:description" content="前言关于这个工具的制作，这篇文章提供了基本思路，可以参考下：自定义命令行工具基于Nodejs 目录结构在该目录下：C:\Users\用户名\AppData\Roaming\npm ，新建相关文件，以及安装所依赖的插件包。12345678910111213141516npm|--nie.cmd  //windows下的命令入口文件(自定义的命令)|--node_modules  //nodejs的全">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-27T11:03:09.426Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于NodeJs的自定义命令行图片压缩工具制作">
+<meta name="twitter:description" content="前言关于这个工具的制作，这篇文章提供了基本思路，可以参考下：自定义命令行工具基于Nodejs 目录结构在该目录下：C:\Users\用户名\AppData\Roaming\npm ，新建相关文件，以及安装所依赖的插件包。12345678910111213141516npm|--nie.cmd  //windows下的命令入口文件(自定义的命令)|--node_modules  //nodejs的全">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xiaojiecong.github.io/2017/08/27/基于NodeJs的自定义命令行图片压缩工具制作/"/>
+
+
+
+
+
+  <title>基于NodeJs的自定义命令行图片压缩工具制作 | 前端搜索者</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">前端搜索者</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://xiaojiecong.github.io/2017/08/27/基于NodeJs的自定义命令行图片压缩工具制作/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jervis">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端搜索者">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">基于NodeJs的自定义命令行图片压缩工具制作</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-27T19:01:40+08:00">
+                2017-08-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>关于这个工具的制作，这篇文章提供了基本思路，可以参考下：<a href="http://feg.netease.com/archives/207.html" target="_blank" style="color: #B94A48;">自定义命令行工具基于Nodejs</a></p>
+<h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h3><p>在该目录下：C:\Users\用户名\AppData\Roaming\npm ，新建相关文件，以及安装所依赖的插件包。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">npm</div><div class="line">|--nie.cmd  //windows下的命令入口文件(自定义的命令)</div><div class="line">|--node_modules  //nodejs的全局插件保存目录</div><div class="line">|    |--nie    //nie命令插件的目录</div><div class="line">|    |    |--nie.js  //nie命令的代码实现文件</div><div class="line">|    |    |--index.js //默认入口文件</div><div class="line">|    |    |--package.json</div><div class="line">|    |    |--README.md</div><div class="line">|    |    |--node_modules    //命令行工具依赖插件包</div><div class="line">|    |    |    |--liftoff    </div><div class="line">|    |    |    |--minimist   </div><div class="line">|    |    |    |--glob       </div><div class="line">|    |    |    |--node-pngquant-native </div><div class="line">|    |    |    |--imagemin   </div><div class="line">|    |    |    |--imagemin-jpegoptim </div><div class="line">|    |    |    |--images</div></pre></td></tr></table></figure></p>
+<p>在nie目录下，<code>npm init</code>创建<code>package.json</code>文件。到时发布npm包，这个文件是必须要有的，文件里记录了版本号，名称，描述，依赖的插件等等信息。</p>
+<p>第三方模块说明：</p>
+<p><code>liftoff</code>：自定义命令行，执行命令行插件</p>
+<p><code>minimist</code>：命令行参数解析插件</p>
+<p><code>glob</code>：用于获取匹配对应规则的文件，基本用法如：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> glob = <span class="built_in">require</span>(<span class="string">"glob"</span>);</div><div class="line">glob(<span class="string">'*.jpg'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">err,files</span>)</span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(files) <span class="comment">//返回一个数组，存放了所有匹配到的文件</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p><code>node-pngquant-native</code>：用于压缩png图片</p>
+<p><code>imagemin</code>、<code>imagemin-jpegoptim</code>：用于压缩jpg图片，需要注意的是，这里需要安装指定的版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install imagemin@4.0.0 imagemin-jpegoptim@4.1.0 --save</div></pre></td></tr></table></figure>
+<p><code>images</code>：用于等比缩放图片</p>
+<h4 id="nie-cmd文件"><a href="#nie-cmd文件" class="headerlink" title="nie.cmd文件"></a>nie.cmd文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@IF EXIST &quot;%~dp0\node.exe&quot; (</div><div class="line">  &quot;%~dp0\node.exe&quot;  &quot;%~dp0\node_modules\nie\nie.js&quot; %*</div><div class="line">) ELSE (</div><div class="line">  node  &quot;%~dp0\node_modules\nie\nie.js&quot; %*</div><div class="line">)</div></pre></td></tr></table></figure>
+<h3 id="nie-js"><a href="#nie-js" class="headerlink" title="nie.js"></a>nie.js</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env node</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> Liftoff = <span class="built_in">require</span>(<span class="string">'liftoff'</span>);</div><div class="line"><span class="keyword">var</span> argv = <span class="built_in">require</span>(<span class="string">'minimist'</span>)(process.argv.slice(<span class="number">2</span>));</div><div class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>);</div><div class="line"><span class="keyword">var</span> glob = <span class="built_in">require</span>(<span class="string">"glob"</span>);</div><div class="line"><span class="keyword">var</span> command = argv[<span class="string">"_"</span>];</div><div class="line"><span class="keyword">var</span> version = <span class="built_in">require</span>(<span class="string">'./package.json'</span>).version;</div><div class="line"></div><div class="line"><span class="keyword">var</span> cli = <span class="keyword">new</span> Liftoff(&#123;</div><div class="line">	name: <span class="string">'nie'</span>, <span class="comment">// 命令名字</span></div><div class="line">	processTitle: <span class="string">'nie'</span>,</div><div class="line">	moduleName: <span class="string">'nie'</span>,</div><div class="line">	configName: <span class="string">''</span>,</div><div class="line"></div><div class="line">	<span class="comment">// only js supported!</span></div><div class="line">	extensions: &#123;</div><div class="line">		<span class="string">'.js'</span>: <span class="literal">null</span></div><div class="line">	&#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">mkdirsSync</span>(<span class="params">dirpath, mode</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (!fs.existsSync(dirpath)) &#123;</div><div class="line">		<span class="keyword">var</span> pathtmp = <span class="string">""</span>;</div><div class="line">		dirpath.split(path.sep).forEach(<span class="function"><span class="keyword">function</span>(<span class="params">dirname</span>) </span>&#123;</div><div class="line">			<span class="keyword">if</span> (pathtmp) &#123;</div><div class="line">				pathtmp = path.join(pathtmp, dirname);</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				pathtmp = dirname;</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (!fs.existsSync(pathtmp)) &#123;</div><div class="line">				<span class="keyword">if</span> (!fs.mkdirSync(pathtmp, mode)) &#123;</div><div class="line">					<span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">globImg</span>(<span class="params">pattern, imgtype</span>) </span>&#123;</div><div class="line"></div><div class="line"></div><div class="line">	<span class="keyword">if</span> (command[<span class="number">0</span>] == <span class="string">'compress'</span>) &#123;</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (imgtype == <span class="string">'png'</span>) &#123;</div><div class="line"></div><div class="line">			<span class="keyword">var</span> pngquant = <span class="built_in">require</span>(<span class="string">'node-pngquant-native'</span>);</div><div class="line"></div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (imgtype == <span class="string">'jpg'</span>) &#123;</div><div class="line"></div><div class="line">			<span class="keyword">var</span> Imagemin = <span class="built_in">require</span>(<span class="string">'imagemin'</span>);</div><div class="line">			<span class="keyword">var</span> imageminJpegoptim = <span class="built_in">require</span>(<span class="string">'imagemin-jpegoptim'</span>);</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (command.length == <span class="number">2</span> || command.length &gt; <span class="number">2</span> &amp;&amp; <span class="keyword">typeof</span> command[command.length - <span class="number">1</span>] != <span class="string">'number'</span>) &#123;</div><div class="line">				<span class="keyword">var</span> max = <span class="number">60</span>;</div><div class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> (command.length &gt; <span class="number">2</span> &amp;&amp; <span class="keyword">typeof</span> command[command.length - <span class="number">1</span>] == <span class="string">'number'</span>) &#123;</div><div class="line">				<span class="keyword">var</span> max = command[command.length - <span class="number">1</span>];</div><div class="line">			&#125;</div><div class="line"></div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (command[<span class="number">0</span>] == <span class="string">'resize'</span>) &#123;</div><div class="line">		<span class="keyword">var</span> images = <span class="built_in">require</span>(<span class="string">"images"</span>);</div><div class="line">		<span class="keyword">var</span> quality = command[<span class="number">3</span>] || <span class="number">100</span>; <span class="comment">//质量默认100</span></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//glob查询所有匹配到的图片</span></div><div class="line">	glob(pattern, <span class="function"><span class="keyword">function</span>(<span class="params">err, files</span>) </span>&#123;</div><div class="line"></div><div class="line">		<span class="keyword">var</span> project_path = process.cwd();</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (command[<span class="number">0</span>] == <span class="string">'compress'</span>) &#123;</div><div class="line">			<span class="built_in">console</span>.log(<span class="string">"Compress "</span> + imgtype.toUpperCase() + <span class="string">" Start,Total "</span> + imgtype.toUpperCase() + <span class="string">": "</span> + files.length);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> (command[<span class="number">0</span>] == <span class="string">'resize'</span>) &#123;</div><div class="line">			<span class="built_in">console</span>.log(<span class="string">"Resize "</span> + imgtype.toUpperCase() + <span class="string">" Start,Total "</span> + imgtype.toUpperCase() + <span class="string">": "</span> + files.length);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; files.length; i++) &#123;</div><div class="line"></div><div class="line">			<span class="keyword">var</span> relative_path = path.relative(project_path, files[i]);</div><div class="line">			<span class="keyword">if</span> (!fs.existsSync(project_path + <span class="string">"/output/"</span> + path.dirname(relative_path))) &#123;</div><div class="line">				mkdirsSync(path.join(project_path + <span class="string">"/output/"</span> + path.dirname(relative_path)));</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">var</span> startTime = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">			<span class="comment">//压缩图片</span></div><div class="line">			<span class="keyword">if</span> (command[<span class="number">0</span>] == <span class="string">'compress'</span>) &#123;</div><div class="line">				<span class="keyword">if</span> (imgtype == <span class="string">'png'</span>) &#123; <span class="comment">//png的处理方式</span></div><div class="line"></div><div class="line">					<span class="keyword">var</span> buffer = fs.readFileSync(files[i]);</div><div class="line">					<span class="keyword">var</span> resBuffer = pngquant.compress(buffer, &#123;</div><div class="line">						<span class="string">"speed"</span>: <span class="number">10</span></div><div class="line">					&#125;);</div><div class="line">					fs.writeFileSync(<span class="string">'./output/'</span> + relative_path, resBuffer, &#123;</div><div class="line">						flags: <span class="string">'wb'</span></div><div class="line">					&#125;);</div><div class="line"></div><div class="line">				&#125; <span class="keyword">else</span> <span class="keyword">if</span> (imgtype == <span class="string">'jpg'</span>) &#123; <span class="comment">//jpg的处理方式</span></div><div class="line">					<span class="keyword">new</span> Imagemin()</div><div class="line">						.src(files[i])</div><div class="line">						.dest(<span class="string">'./output/'</span> + path.dirname(relative_path))</div><div class="line">						.use(imageminJpegoptim(&#123;</div><div class="line">							progressive: <span class="literal">true</span>,</div><div class="line">							max: max</div><div class="line">						&#125;))</div><div class="line">						.run();</div><div class="line">				&#125;</div><div class="line">				<span class="built_in">console</span>.log(<span class="string">"Compress File Success("</span> + (<span class="keyword">new</span> <span class="built_in">Date</span>() - startTime) + <span class="string">"ms):"</span> + path.basename(files[i]));</div><div class="line">			&#125;</div><div class="line">			<span class="comment">//修改图片尺寸</span></div><div class="line">			<span class="keyword">if</span> (command[<span class="number">0</span>] == <span class="string">'resize'</span>) &#123;</div><div class="line">				images(files[i]) <span class="comment">//Load image from file 					</span></div><div class="line">					.size(command[<span class="number">2</span>]) <span class="comment">//Geometric scaling the image to * pixels width</span></div><div class="line">					.save(<span class="string">'./output/'</span> + files[i], &#123;</div><div class="line">						quality: quality <span class="comment">//图片质量设置</span></div><div class="line">					&#125;);</div><div class="line">				<span class="built_in">console</span>.log(<span class="string">"Resize File Success("</span> + (<span class="keyword">new</span> <span class="built_in">Date</span>() - startTime) + <span class="string">"ms):"</span> + path.basename(files[i]));</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;)</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">compress</span>(<span class="params">imgtype</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (command[<span class="number">0</span>] == <span class="string">'compress'</span>) &#123;</div><div class="line">		<span class="keyword">if</span> (command[<span class="number">1</span>] == imgtype) &#123;</div><div class="line">			globImg(<span class="string">'**/*.'</span> + imgtype, imgtype)</div><div class="line">			<span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (command[<span class="number">1</span>] &amp;&amp; command[<span class="number">1</span>].indexOf(<span class="string">'.'</span> + imgtype) != <span class="number">-1</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (command.length == <span class="number">2</span>) &#123; <span class="comment">//压缩单个文件如 nie compress 1.png</span></div><div class="line">				globImg(command[<span class="number">1</span>], imgtype);</div><div class="line">				<span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				globImg(<span class="string">'&#123;'</span> + command.slice(<span class="number">1</span>).join(<span class="string">','</span>) + <span class="string">'&#125;'</span>, imgtype); <span class="comment">//压缩多个文件如 nie compress 1.png 2.png 3.png		</span></div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">resize</span>(<span class="params">imgtype</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (command[<span class="number">0</span>] == <span class="string">'resize'</span>) &#123;</div><div class="line">		<span class="keyword">if</span> (command[<span class="number">1</span>] == imgtype &amp;&amp; command[<span class="number">2</span>]) &#123;</div><div class="line">			globImg(<span class="string">'**/*.'</span> + imgtype, imgtype)</div><div class="line">			<span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">cli.launch(&#123;</div><div class="line">	cwd: argv.r || argv.root,</div><div class="line">	configPath: argv.f || argv.file</div><div class="line">&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">env</span>) </span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (process.argv[<span class="number">2</span>] == <span class="string">'-v'</span>) &#123; <span class="comment">// nie -v  </span></div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'v'</span> + version) <span class="comment">//输出版本</span></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//压缩png图片</span></div><div class="line">	compress(<span class="string">'png'</span>)</div><div class="line"></div><div class="line">	<span class="comment">//压缩jpg图片</span></div><div class="line">	compress(<span class="string">'jpg'</span>)</div><div class="line"></div><div class="line">	<span class="comment">//等比修改png图片尺寸</span></div><div class="line">	resize(<span class="string">'png'</span>)</div><div class="line"></div><div class="line">	<span class="comment">//等比修改jpg图片尺寸</span></div><div class="line">	resize(<span class="string">'jpg'</span>)</div><div class="line"></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="index-js"><a href="#index-js" class="headerlink" title="index.js"></a>index.js</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var compress = module.exports =  require(&apos;nie&apos;);</div></pre></td></tr></table></figure>
+<p>制作阶段完成之后，注册npm账号，然后<code>npm login</code>登录，<code>npm publish</code>就发布了。如果有修改，下次发布前需要在<code>package.json</code>文件修改一下版本号。发布之后，<a href="https://www.npmjs.com/package/nie" target="_blank" style="color: #B94A48;">官网</a>这里就可以搜到这个了。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>发布之后就可以通过npm方式来安装这个工具了，安装比较慢的话，可以带上<code>--registry=https://registry.npm.taobao.org</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g nie --registry=https://registry.npm.taobao.org</div></pre></td></tr></table></figure>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>压缩所有png图片</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nie compress png</div></pre></td></tr></table></figure>
+<p>压缩单个png图片，如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nie compress 1.png</div></pre></td></tr></table></figure></p>
+<p>压缩多个png图片，如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nie compress 1.png 2.png 3.png</div></pre></td></tr></table></figure></p>
+<p>压缩所有jpg图片，压缩质量不填，默认会是60</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nie compress jpg 80</div></pre></td></tr></table></figure>
+<p>压缩单个jpg图片，如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nie compress 1.jpg 80</div></pre></td></tr></table></figure></p>
+<p>压缩多个jpg图片，如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nie compress 1.jpg 2.jpg 3.jpg 80</div></pre></td></tr></table></figure></p>
+<p>等比缩放jpg或png图片，参数400为设置的宽度，参数90是图片质量，不填默认是100</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nie resize jpg 400 90</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nie resize png 400 90</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/27/使用PhantomJS对网页截屏/" rel="next" title="使用PhantomJS对网页截屏">
+                <i class="fa fa-chevron-left"></i> 使用PhantomJS对网页截屏
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.jpg"
+               alt="Jervis" />
+          <p class="site-author-name" itemprop="name">Jervis</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目录结构"><span class="nav-number">2.</span> <span class="nav-text">目录结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#nie-cmd文件"><span class="nav-number">2.1.</span> <span class="nav-text">nie.cmd文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nie-js"><span class="nav-number">3.</span> <span class="nav-text">nie.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#index-js"><span class="nav-number">4.</span> <span class="nav-text">index.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">5.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">6.</span> <span class="nav-text">使用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jervis</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
